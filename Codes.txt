@@ -1,0 +1,48 @@
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
+import io.restassured.response.Response;
+import java.util.List;
+import static io.restassured.RestAssured.given;
+
+public class RestTest {
+
+public static Response doGetRequest(String endpoint) {
+    RestAssured.defaultParser = Parser.JSON;
+    return given().headers("Content-Type", ContentType.JSON, "Accept",ContentType.JSON)
+        .when().get(endpoint).
+        .then().contentType(ContentType.JSON).extract().response();
+}
+
+@Test
+public static void validateTheTeamHas4ForeignPlayer() {
+    Response response = doGetRequest("url+endpoint");
+    List<Object> jsonResponsePlayerCountry = response.jsonPath().getList("$.player[*].country");
+    int countIndia = 0;
+    int countOtherCountry = 0;
+    if (jsonResponsePlayerCountry.contains("India")){
+        countIndia++;
+    }else{
+        countOtherCountry++;
+    }
+    if(countOtherCountry == 4){
+        System.out.println("team has 4 member from other country");
+    }
+     System.out.println(jsonResponse.size());
+}
+
+@Test
+public static void validateTheAtleastOneWiketKeeper() {
+    Response response = doGetRequest("url+endpoint");
+    List<Object> jsonResponsePlayerCountry = response.jsonPath().getList("$.player[*].role");
+    int countWicketKeeper = 0;
+    if (jsonResponsePlayerCountry.contains("Wicket-keeper")){
+    countWicketKeeper++;
+    }
+    If(countWicketKeeper > 0){
+        System.out.println("team has Wicket-keeper");
+    }else{
+        System.out.println("team has no Wicket-keeper");
+    }
+  }
+}
